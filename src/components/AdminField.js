@@ -125,8 +125,54 @@ import { Form, Button } from "react-bootstrap";
 
 // export default AdminField;
 import React, { Component } from "react";
+import DropdownService from "../services/DropdownService";
+import AdminService from "../services/AdminService";
 
 class AdminField extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+        batchs:[],
+        modules:[],
+        selectedFile:"",
+        moduleId:""
+    }
+    this.changeModule=this.changeModule.bind(this);
+    this.onFileChangeHandler=this.onFileChangeHandler.bind(this);
+ 
+  }
+  componentDidMount(){
+    DropdownService.getModules().then((res)=>{
+       this.setState({modules:res.data});
+    });
+    DropdownService.getBatchs().then((res)=>{
+      this.setState({batchs:res.data});
+   });
+
+  }
+
+  changeModule=(e)=>{
+    this.setState({moduleId:e.target.value});
+  }
+  onFileChangeHandler=(e)=>{
+    e.preventDefault();
+    this.setState({
+      selectedFile:e.target.files[0]
+    });
+    const formData=new FormData();
+    formData.append('file',this.state.selectedFile);
+    console.log(JSON.stringify(formData));
+    AdminService.uploadExcel(formData).then(res=>{
+      console.log(res.data);
+      alert("File uploaded succesfully");
+    })
+  }
+
+  // uploadFile=(e)=>{
+  //   console.log(this.state.moduleId);
+  //   console.log(this.state.file);
+  //   AdminService.uploadExcel(this.state.file,this.state.moduleId);
+  // }
   render() {
     return (
       <div>
@@ -137,31 +183,36 @@ class AdminField extends Component {
         <div className="container-fluid admin-field-container">
           <div className="row d-flex justify-content-around">
             <div className="col-2 p-2 div-border admin-field">
-              <Form>
+              <Form enctype="multipart/form-data">
                 <Form.Group>
                   <Form.Label className="mr-2">Upload Marks</Form.Label>
                 </Form.Group>
                 <Form.Control className="my-2" as="select" custom>
-                  <option>Select Batch</option>
-                  <option value="1">Feb 20</option>
-                  <option value="1">Sept 20</option>
-                  <option value="2">Feb 21</option>
+                  <option name="batchs">Select Batch</option>
+                  {
+                    this.state.batchs.map(
+                     batchs=>
+                     <option key={batchs.batchId} value={batchs.batchId}>{batchs.batchMonth}{batchs.batchYear}</option>
+                    )
+                  }
+                  
+                  
                 </Form.Control>
                 <Form.Control
                   className="my-2"
                   as="select"
                   id="inlineFormCustomSelectPref"
                   custom
+                  name="modules"
+                  onChange={this.changeModule}
                 >
-                  <option>Select Subject</option>
-                  <option value="1">Basic Fundamentals</option>
-                  <option value="2">Operating systems</option>
-                  <option value="3">Core Java</option>
-                  <option value="4">Data Structure</option>
-                  <option value="5">Database</option>
-                  <option value="6">Software Engineering</option>
-                  <option value="7">Web Technology</option>
-                  <option value="8">Advance Java</option>
+                  <option >Select Subject</option>
+                  {
+                    this.state.modules.map(
+                     modules=>
+                     <option key={modules.moduleId} value={modules.moduleId} >{modules.moduleName}  </option>
+                    )
+                  }
                 </Form.Control>
                 <Form.Control
                   className="my-2"
@@ -174,12 +225,13 @@ class AdminField extends Component {
                   <option value="1">Lab</option>
                 </Form.Control>
                 <Form.Group>
-                  <Form.File id="exampleFormControlFile1" label="Select File" />
+                 <input type="file" className="form-control" name="file" onChange={this.onFileChangeHandler}/>
                 </Form.Group>
                 <Button
                   className="my-2 text-center"
                   variant="secondary"
                   type="submit"
+                 
                 >
                   Upload
                 </Button>
@@ -207,10 +259,13 @@ class AdminField extends Component {
                     <Form.Label className="mr-2">Upload Marks</Form.Label>
                   </Form.Group>
                   <Form.Control className="my-2" as="select" custom>
-                    <option>Select Batch</option>
-                    <option value="1">Feb 20</option>
-                    <option value="1">Sept 20</option>
-                    <option value="2">Feb 21</option>
+                  <option name="batchs">Select Batch</option>
+                  {
+                    this.state.batchs.map(
+                     batchs=>
+                     <option key={batchs.batchId} value={batchs.batchId}>{batchs.batchMonth}{batchs.batchYear}</option>
+                    )
+                  }
                   </Form.Control>
                   <Form.Control
                     className="my-2"
@@ -218,15 +273,13 @@ class AdminField extends Component {
                     id="inlineFormCustomSelectPref"
                     custom
                   >
-                    <option>Select Subject</option>
-                    <option value="1">Basic Fundamentals</option>
-                    <option value="2">Operating systems</option>
-                    <option value="3">Core Java</option>
-                    <option value="4">Data Structure</option>
-                    <option value="5">Database</option>
-                    <option value="6">Software Engineering</option>
-                    <option value="7">Web Technology</option>
-                    <option value="8">Advance Java</option>
+                   <option name="modules">Select Subject</option>
+                  {
+                    this.state.modules.map(
+                     modules=>
+                     <option key={modules.moduleId} value={modules.moduleId}>{modules.moduleName}</option>
+                    )
+                  }
                   </Form.Control>
                   <Button
                     variant="secondary"

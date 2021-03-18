@@ -1,6 +1,7 @@
 // import React from "react";
 import SearchStud from "./SearchStud";
 import { Form, Button } from "react-bootstrap";
+import DropdownService from "../services/DropdownService";
 
 // function SupAdminField() {
 //   return (
@@ -131,6 +132,26 @@ import { Form, Button } from "react-bootstrap";
 import React, { Component } from 'react';
 
 class SupAdminField extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+        batchs:[],
+        modules:[]      
+    }
+    
+ 
+  }
+  componentDidMount(){
+    DropdownService.getModules().then((res)=>{
+       this.setState({modules:res.data});
+    });
+    DropdownService.getBatchs().then((res)=>{
+      this.setState({batchs:res.data});
+   });
+
+  }
+
+ 
   render() {
     return (
       <div className="container-fluid">
@@ -146,10 +167,15 @@ class SupAdminField extends Component {
                 <Form.Label className="mr-2">See Rank</Form.Label>
               </Form.Group>
               <Form.Control className="my-2" as="select" custom>
-                <option>Select Batch</option>
-                <option value="1">Feb 20</option>
-                <option value="1">Sept 20</option>
-                <option value="2">Feb 21</option>
+                
+                <option name="batchs">Select Batch</option>
+                  {
+                    this.state.batchs.map(
+                     batchs=>
+                     <option key={batchs.batchId} value={batchs.batchId}>{batchs.batchMonth}{batchs.batchYear}</option>
+                    )
+                  }
+                  
               </Form.Control>
 
               <div>
@@ -204,10 +230,15 @@ class SupAdminField extends Component {
                 </Form.Label>
               </Form.Group>
               <Form.Control className="my-2" as="select" custom>
-                <option>Select Batch</option>
-                <option value="1">Feb 20</option>
-                <option value="1">Sept 20</option>
-                <option value="2">Feb 21</option>
+              
+                <option name="batchs">Select Batch</option>
+                  {
+                    this.state.batchs.map(
+                     batchs=>
+                     <option key={batchs.batchId} value={batchs.batchId}>{batchs.batchMonth}{batchs.batchYear}</option>
+                    )
+                  }
+                  
               </Form.Control>
               <Form.Control
                 className="my-2"
@@ -215,15 +246,14 @@ class SupAdminField extends Component {
                 id="inlineFormCustomSelectPref"
                 custom
               >
-                <option>Select Subject</option>
-                <option value="1">Basic Fundamentals</option>
-                <option value="2">Operating systems</option>
-                <option value="3">Core Java</option>
-                <option value="4">Data Structure</option>
-                <option value="5">Database</option>
-                <option value="6">Software Engineering</option>
-                <option value="7">Web Technology</option>
-                <option value="8">Advance Java</option>
+              
+                <option >Select Subject</option>
+                  {
+                    this.state.modules.map(
+                     modules=>
+                     <option key={modules.moduleId} value={modules.moduleId} >{modules.moduleName}  </option>
+                    )
+                  }
               </Form.Control>
               <div>
                 <Form.Control

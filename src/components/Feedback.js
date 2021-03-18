@@ -1,8 +1,24 @@
 import React from "react";
 
 import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
-
+import DropdownService from "../services/DropdownService";
 class Feedback extends React.Component {
+  constructor(props){
+    super(props);
+    this.state={
+       
+        modules:[]      
+    }
+    
+ 
+  }
+  componentDidMount(){
+    DropdownService.getModules().then((res)=>{
+       this.setState({modules:res.data});
+    });
+   
+
+  }
   render() {
     return (
       <>
@@ -20,11 +36,12 @@ class Feedback extends React.Component {
                         <Form.Label>Select Module</Form.Label>
                         <Form.Control as="select">
                           <option>Select Subject</option>
-                          <option>Basic Programming</option>
-                          <option>Data Structure</option>
-                          <option>Database</option>
-                          <option>Web Programming</option>
-                          <option>Advanced Java</option>
+                          {
+                    this.state.modules.map(
+                     modules=>
+                     <option key={modules.moduleId} value={modules.moduleId} >{modules.moduleName}  </option>
+                    )
+                  }
                         </Form.Control>
                       </Form.Group>
                     </Col>

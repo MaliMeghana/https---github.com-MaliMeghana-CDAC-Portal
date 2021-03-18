@@ -3,7 +3,8 @@ import Header from "./components/Header";
 import AdminField from "./components/AdminField";
 import Admin from "./components/Admin";
 import SupAdminField from "./components/SupAdminField";
-import { Route, BrowserRouter as Router } from "react-router-dom";
+import { Route, BrowserRouter as Router,Switch ,withRouter} from "react-router-dom";
+import {createBrowserHistory} from "history";
 import UpdateStudent from "./components/UpdateStudent";
 import Student from "./components/Student";
 import Login from "./components/Login";
@@ -11,11 +12,13 @@ import Feedback from "./components/Feedback";
 import Notice from "./components/Notice";
 
 function App() {
+  const history=createBrowserHistory();
   return (
     <div className="main-container">
-      <Router>
+      <Router history={history}>
         <Header />
         <div className="main">
+        <Switch>
           <Route exact path="/">
             <Login />
           </Route>
@@ -40,7 +43,9 @@ function App() {
           <Route path="/notice">
             <Notice />
           </Route>
+          </Switch>
         </div>
+        
       </Router>
     </div>
   );
