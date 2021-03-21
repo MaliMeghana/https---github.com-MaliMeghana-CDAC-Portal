@@ -2,7 +2,7 @@
 import SearchStud from "./SearchStud";
 import { Form, Button } from "react-bootstrap";
 import DropdownService from "../services/DropdownService";
-
+import SuperAdminService from "../services/SuperAdminService";
 // function SupAdminField() {
 //   return (
 //     <div className="container-fluid">
@@ -136,9 +136,10 @@ class SupAdminField extends Component {
     super(props);
     this.state={
         batchs:[],
-        modules:[]      
+        modules:[],
+        rank:[]      
     }
-    
+    this.searchRank=this.searchRank.bind(this);
  
   }
   componentDidMount(){
@@ -148,10 +149,16 @@ class SupAdminField extends Component {
     DropdownService.getBatchs().then((res)=>{
       this.setState({batchs:res.data});
    });
-
+  //  SuperAdminService.getRankData().then((res)=>{
+  //   this.setState({rank:res.data});
+ //});
+    
   }
-
- 
+searchRank=()=>{
+  SuperAdminService.getRankData().then((res=>{
+    this.setState({rank:res.data});
+  }))
+}
   render() {
     return (
       <div className="container-fluid">
@@ -215,7 +222,30 @@ class SupAdminField extends Component {
             </Form>
           </div>
           <div className="col-7 div-border admin-field admin-field-middle">
-            <div>2</div>
+            <div>
+            <table>
+            <thead>
+              <tr>
+              <th>Student</th>
+              <th>Module</th>
+              <th>Rank</th></tr></thead>
+              <tbody>
+              {
+                this.state.rank.map(
+                  rank=>
+                 
+                  <tr>
+                  <td>{rank.student.studId}</td>
+                  <td>{rank.module.moduleName}</td>
+                  <td>{rank.rank}</td>
+                  </tr>
+                 
+                )
+              }
+              </tbody>
+            </table>
+                 
+            </div>
             <div className="export">
               <Button className="export-button" variant="secondary">
                 Export
@@ -274,6 +304,7 @@ class SupAdminField extends Component {
                   variant="secondary"
                   className="button-align"
                   type="submit"
+                  onClick={this.searchRank}
                 >
                   Search
                 </Button>

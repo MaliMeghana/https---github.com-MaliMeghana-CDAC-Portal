@@ -1,18 +1,24 @@
 import React, { Component } from "react";
-import {createBrowserHistory} from "history";
-import { Route, BrowserRouter as Router,Switch ,withRouter} from "react-router-dom";
+
+import { Route, BrowserRouter as Router,Switch ,withRouter, useHistory} from "react-router-dom";
 import "./login.css";
 import { Button, Card, Form, Container, Row, Col } from "react-bootstrap";
 import LoginService from "../services/LoginService";
+import history from "./history";
+import {ExcelRenderer,OutTable } from "react-excel-renderer";
 class Login extends Component {
+ 
   constructor(props){
     super(props);
     this.state={
+        user:[],  
         userId:"",
         password:"",
+        role1:[],    
         roleId:"",
-        role1:[]
+        
     }
+    
     this.roleChnage=this.roleChnage.bind(this);
     this.login=this.login.bind(this);
     this.userIdChange=this.userIdChange.bind(this);
@@ -26,13 +32,28 @@ class Login extends Component {
   roleChnage=(e)=>{
       this.setState({roleId:e.target.value});
   }
-  login=(e)=>{
-    e.preventDefault();
-    let user=({userId:this.state.userId,password:this.state.password,role:{roleId:this.state.roleId}});
-    console.log("user", JSON.stringify(user));
-     LoginService.login(user).then(res=>{
-      this.props.history.push("/admin");
-     });
+   login(){
+     
+      // let user1={userId:this.state.userId,password:this.state.password,role:{roleId:this.state.roleId}};
+      // console.log("user", JSON.stringify(user1));
+      LoginService.login(this.state.userId,this.state.password,this.state.roleId).then((res)=>{
+        console.log("data"+res.data);
+        if(res.data==null){
+          history.push('/');
+          alert("Invalid");
+        }else{
+          if(this.state.roleId==1){
+            history.push('/supadmin');
+          }else if(this.state.roleId==2){
+            history.push('/admin');
+          }else if(this.state.roleId==3){
+            history.push('/student');
+          }
+        }     
+       
+       
+      });
+     
     
   }
   userIdChange=(e)=>{
@@ -41,6 +62,7 @@ class Login extends Component {
   passwordChange=(e)=>{
     this.setState({password:e.target.value});
   }
+  
   render() {
     return (
       //   <div className="container div-border admin-field mt-5 p-3">
@@ -95,6 +117,7 @@ class Login extends Component {
 
               <Form.Group controlId="exampleForm.ControlSelect2">
                 <Form.Control as="select" name="role" onChange={this.roleChnage}>
+                <option value="">Select Role</option>
                 {
                    this.state.role1.map(
                      role1=>

@@ -6,9 +6,9 @@ class LoginService{
         return axios.get(LOGIN_SERVICE_URL+ "role");
     }
 
-    login(user){
-        console.log("user", JSON.stringify(user));
-        return axios.post(LOGIN_SERVICE_URL,user);
+    login(userId,password,roleId){
+        //console.log("user", JSON.stringify(user1));
+        return axios.post(LOGIN_SERVICE_URL+userId+"/"+password+"/"+roleId);
     }
 }
 

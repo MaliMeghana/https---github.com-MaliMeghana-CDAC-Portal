@@ -7,12 +7,13 @@ import { Route, BrowserRouter as Router,Switch ,withRouter} from "react-router-d
 import {createBrowserHistory} from "history";
 import UpdateStudent from "./components/UpdateStudent";
 import Student from "./components/Student";
-import Login from "./components/Login";
+import Login from "./components/Login.jsx";
 import Feedback from "./components/Feedback";
 import Notice from "./components/Notice";
+import history from "./components/history";
 
 function App() {
-  const history=createBrowserHistory();
+ 
   return (
     <div className="main-container">
       <Router history={history}>
@@ -31,9 +32,7 @@ function App() {
           <Route path="/supadmin">
             <SupAdminField />
           </Route>
-          <Route path="/student">
-            <Student />
-          </Route>
+          <Route path="/student" exact component={Student}> </Route>
           <Route path="/updateStudent">
             <UpdateStudent />
           </Route>
