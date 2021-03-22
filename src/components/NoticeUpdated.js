@@ -30,7 +30,7 @@ function Notice (){
        
        let addNotice=()=>{
             console.log(notice);
-            axios.post('')
+            axios.post('http://localhost:8080/notice/add',);
        }
     return (
       <div className="container div-border admin-field mt-5 p-3">
