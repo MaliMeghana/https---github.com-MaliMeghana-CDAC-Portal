@@ -11,7 +11,10 @@ import Login from "./components/Login.jsx";
 import Feedback from "./components/Feedback";
 import Notice from "./components/Notice";
 import history from "./components/history";
+import Test from "./components/Test";
+import NoticeUpdated from "./components/NoticeUpdated";
 
+import AdminFieldUpdated from "./components/AdminFieldUpdated";
 function App() {
  
   return (
@@ -41,6 +44,15 @@ function App() {
           </Route>
           <Route path="/notice">
             <Notice />
+          </Route>
+          <Route path="/test">
+            <Test />
+          </Route>
+          <Route path="/adminu">
+            <AdminFieldUpdated />
+          </Route>
+          <Route path="/noticeu">
+            <NoticeUpdated />
           </Route>
           </Switch>
         </div>
